@@ -18,6 +18,18 @@ class ChatRepository(
         messageDao.insertMessage(message)
     }
 
+    suspend fun updateMessage(message: Message) {
+        messageDao.updateMessage(message)
+    }
+
+    suspend fun deleteMessage(messageId: Long) {
+        messageDao.deleteMessage(messageId)
+    }
+
+    fun searchMessages(groupId: Long, query: String): Flow<List<Message>> {
+        return messageDao.searchMessages(groupId, query)
+    }
+
     fun getAllGroups(): Flow<List<Group>> {
         return groupDao.getAllGroups()
     }
