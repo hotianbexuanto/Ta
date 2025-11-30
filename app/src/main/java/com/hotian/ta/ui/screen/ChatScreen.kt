@@ -26,7 +26,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
@@ -430,7 +429,7 @@ fun EnhancedMessageInputField(
     ) {
         IconButton(onClick = onImageClick) {
             Icon(
-                imageVector = Icons.Default.Image,
+                imageVector = Icons.Default.Add,
                 contentDescription = "选择图片",
                 tint = MaterialTheme.colorScheme.primary
             )
