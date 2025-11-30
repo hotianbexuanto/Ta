@@ -1,0 +1,30 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/data/GroupDao.kt</file>
+  <line>11</line>
+  <module>Ta.app.main</module>
+  <package>com.hotian.ta.data</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/data/GroupDao.kt" />
+  <problem_class id="Annotator" severity="ERROR" attribute_key="WRONG_REFERENCES_ATTRIBUTES">注解器</problem_class>
+  <hints />
+  <description>应为 &lt;table or subquery&gt;，得到 'groups' #loc</description>
+  <highlighted_element>groups</highlighted_element>
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/data/GroupDao.kt</file>
+  <line>20</line>
+  <module>Ta.app.main</module>
+  <package>com.hotian.ta.data</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/data/GroupDao.kt" />
+  <problem_class id="Annotator" severity="ERROR" attribute_key="WRONG_REFERENCES_ATTRIBUTES">注解器</problem_class>
+  <hints />
+  <description>应为 &lt;table or subquery&gt;，得到 'groups' #loc</description>
+  <highlighted_element>groups</highlighted_element>
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>6</length>
+</problem>
+</problems>

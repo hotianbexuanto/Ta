@@ -1,0 +1,41 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/ui/screen/ChatScreen.kt</file>
+  <line>27</line>
+  <module>Ta.app.main</module>
+  <package>com.hotian.ta.ui.screen</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/ui/screen/ChatScreen.kt" />
+  <problem_class id="KotlinUnusedImport" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">未使用的 import 指令</problem_class>
+  <description>未使用的 import 指令</description>
+  <highlighted_element>import androidx.compose.material.icons.filled.Add</highlighted_element>
+  <language>kotlin</language>
+  <offset>0</offset>
+  <length>49</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/ui/screen/SettingsScreen.kt</file>
+  <line>4</line>
+  <module>Ta.app.main</module>
+  <package>com.hotian.ta.ui.screen</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/ui/screen/SettingsScreen.kt" />
+  <problem_class id="KotlinUnusedImport" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">未使用的 import 指令</problem_class>
+  <description>未使用的 import 指令</description>
+  <highlighted_element>import androidx.compose.foundation.background</highlighted_element>
+  <language>kotlin</language>
+  <offset>0</offset>
+  <length>45</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/ui/screen/SettingsScreen.kt</file>
+  <line>11</line>
+  <module>Ta.app.main</module>
+  <package>com.hotian.ta.ui.screen</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/hotian/ta/ui/screen/SettingsScreen.kt" />
+  <problem_class id="KotlinUnusedImport" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">未使用的 import 指令</problem_class>
+  <description>未使用的 import 指令</description>
+  <highlighted_element>import androidx.compose.foundation.shape.RoundedCornerShape</highlighted_element>
+  <language>kotlin</language>
+  <offset>0</offset>
+  <length>59</length>
+</problem>
+</problems>

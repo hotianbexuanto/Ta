@@ -1,0 +1,168 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>5</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of com.google.devtools.ksp than 2.0.21-1.0.28 is available: 2.1.0-1.0.29&lt;/html&gt;</description>
+  <highlighted_element>&quot;2.0.21-1.0.28&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>42</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>10</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of &lt;code&gt;compileSdk&lt;/code&gt; than 34 is available: 36&lt;/html&gt;</description>
+  <highlighted_element>compileSdk = 34</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>57</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.activity:activity-compose than 1.9.3 is available: 1.12.0&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.activity:activity-compose:1.9.3&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>42</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>58</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.lifecycle:lifecycle-viewmodel-compose than 2.8.7 is available: 2.10.0&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>59</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.lifecycle:lifecycle-runtime-compose than 2.8.7 is available: 2.10.0&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.lifecycle:lifecycle-runtime-compose:2.8.7&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>52</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>60</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.navigation:navigation-compose than 2.8.5 is available: 2.9.6&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.navigation:navigation-compose:2.8.5&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>46</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>68</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.room:room-runtime than 2.6.1 is available: 2.8.4&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.room:room-runtime:$roomVersion&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>41</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>69</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.room:room-ktx than 2.6.1 is available: 2.8.4&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.room:room-ktx:$roomVersion&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>37</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>70</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.room:room-compiler than 2.6.1 is available: 2.8.4&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.room:room-compiler:$roomVersion&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>42</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/build.gradle.kts</file>
+  <line>76</line>
+  <module>Ta.app</module>
+  <package>&lt;默认&gt;</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/build.gradle.kts" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.datastore:datastore-preferences than 1.1.1 is available: 1.2.0&lt;/html&gt;</description>
+  <highlighted_element>&quot;androidx.datastore:datastore-preferences:1.1.1&quot;</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>48</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradle/libs.versions.toml</file>
+  <line>4</line>
+  <module>Ta</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradle/libs.versions.toml" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.core:core-ktx than 1.13.1 is available: 1.17.0&lt;/html&gt;</description>
+  <highlighted_element>&quot;1.13.1&quot;</highlighted_element>
+  <language>TOML</language>
+  <offset>10</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradle/libs.versions.toml</file>
+  <line>10</line>
+  <module>Ta</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradle/libs.versions.toml" />
+  <problem_class id="AndroidLintGradleDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Obsolete Gradle Dependency</problem_class>
+  <hints />
+  <description>&lt;html&gt;A newer version of androidx.activity:activity than 1.9.3 is available: 1.12.0&lt;/html&gt;</description>
+  <highlighted_element>&quot;1.9.3&quot;</highlighted_element>
+  <language>TOML</language>
+  <offset>11</offset>
+  <length>7</length>
+</problem>
+</problems>

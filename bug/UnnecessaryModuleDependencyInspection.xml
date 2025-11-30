@@ -1,0 +1,26 @@
+<problems>
+<problem>
+  <file>Ta.app.unitTest</file>
+  <module>Ta.app.unitTest</module>
+  <entry_point TYPE="module" FQNAME="Ta.app.unitTest" />
+  <problem_class id="UnnecessaryModuleDependencyInspection" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">不必要的模块依赖</problem_class>
+  <hints>
+    <hint value="Ta.app.main" />
+  </hints>
+  <description>模块'Ta.app.unitTest'源不依赖于模块'Ta.app.main'源</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>Ta.app.androidTest</file>
+  <module>Ta.app.androidTest</module>
+  <entry_point TYPE="module" FQNAME="Ta.app.androidTest" />
+  <problem_class id="UnnecessaryModuleDependencyInspection" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">不必要的模块依赖</problem_class>
+  <hints>
+    <hint value="Ta.app.main" />
+  </hints>
+  <description>模块'Ta.app.androidTest'源不依赖于模块'Ta.app.main'源</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>
