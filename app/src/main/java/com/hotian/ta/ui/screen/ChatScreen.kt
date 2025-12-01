@@ -378,13 +378,16 @@ fun EnhancedMessageItem(
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var senderName by remember { mutableStateOf("未知用户") }
-    var isCurrentUserMessage by remember { mutableStateOf(false) }
 
-    // 获取发送者信息
-    LaunchedEffect(message.senderId, currentUser?.id) {
+    // 立即判断是否为当前用户，避免闪烁
+    val isCurrentUserMessage = remember(message.senderId, currentUser?.id) {
+        message.senderId == currentUser?.id
+    }
+
+    // 异步获取发送者名称（不影响布局）
+    LaunchedEffect(message.senderId) {
         val sender = viewModel.getUserById(message.senderId)
         senderName = sender?.name ?: "未知用户"
-        isCurrentUserMessage = message.senderId == currentUser?.id
     }
 
     Row(
