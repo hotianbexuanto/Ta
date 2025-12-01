@@ -41,6 +41,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val settingsRepository = remember { SettingsRepository(context) }
     val useDynamicColor by settingsRepository.useDynamicColor.collectAsState(initial = false)
+    val developerMode by settingsRepository.developerMode.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
 
     Scaffold(
@@ -117,6 +118,55 @@ fun SettingsScreen(
                             }
                         )
                     }
+                }
+            }
+
+            Text(
+                text = "开发者选项",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(vertical = 16.dp, horizontal = 0.dp)
+            )
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = CardDefaults.cardElevation(2.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            scope.launch {
+                                settingsRepository.setDeveloperMode(!developerMode)
+                            }
+                        }
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "开发者模式",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = "显示消息ID、时间戳、排序信息等详细数据",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                    Switch(
+                        checked = developerMode,
+                        onCheckedChange = { enabled ->
+                            scope.launch {
+                                settingsRepository.setDeveloperMode(enabled)
+                            }
+                        }
+                    )
                 }
             }
 

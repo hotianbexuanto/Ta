@@ -69,6 +69,7 @@ import androidx.core.graphics.ColorUtils
 import coil.compose.rememberAsyncImagePainter
 import com.hotian.ta.data.Message
 import com.hotian.ta.data.MessageType
+import com.hotian.ta.data.SettingsRepository
 import com.hotian.ta.data.User
 import com.hotian.ta.viewmodel.ChatViewModel
 import java.text.SimpleDateFormat
@@ -89,6 +90,10 @@ fun ChatScreen(
     val isSearching by viewModel.isSearching.collectAsState()
     val users by viewModel.users.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
+
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val settingsRepository = remember { SettingsRepository(context) }
+    val developerMode by settingsRepository.developerMode.collectAsState(initial = false)
 
     var inputText by remember { mutableStateOf("") }
     var showSearchBar by remember { mutableStateOf(false) }
@@ -218,12 +223,53 @@ fun ChatScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 println("ChatScreen: LazyColumn rendering ${messages.size} items")
+
+                // 开发者模式：显示消息统计信息
+                if (developerMode && messages.isNotEmpty()) {
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                            )
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(
+                                    text = "🔧 开发者信息",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                )
+                                Text(
+                                    text = "消息总数: ${messages.size}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                )
+                                Text(
+                                    text = "排序: 按时间戳升序 (最早→最新)",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                )
+                                if (isSearching) {
+                                    Text(
+                                        text = "搜索中: \"$searchQuery\"",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
                 items(messages, key = { it.id }) { message ->
                     println("ChatScreen: Rendering message - id: ${message.id}, content: ${message.content}")
                     EnhancedMessageItem(
                         message = message,
                         viewModel = viewModel,
                         currentUser = currentUser,
+                        developerMode = developerMode,
                         onImageClick = { imageUri ->
                             showImageViewer = imageUri
                         }
@@ -324,6 +370,7 @@ fun EnhancedMessageItem(
     message: Message,
     viewModel: ChatViewModel,
     currentUser: User?,
+    developerMode: Boolean,
     onImageClick: (String) -> Unit
 ) {
     println("EnhancedMessageItem: Composing message ${message.id} - ${message.content}")
@@ -368,7 +415,7 @@ fun EnhancedMessageItem(
             ) {
                 // 显示发送者名称
                 Text(
-                    text = if (isCurrentUserMessage) "我 ($senderName)" else senderName,
+                    text = senderName,
                     style = MaterialTheme.typography.labelSmall,
                     color = if (isCurrentUserMessage) {
                         MaterialTheme.colorScheme.onPrimaryContainer
@@ -436,6 +483,60 @@ fun EnhancedMessageItem(
                                 MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
                             } else {
                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            }
+                        )
+                    }
+                }
+
+                // 开发者模式：显示详细信息
+                if (developerMode) {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .background(
+                                color = if (isCurrentUserMessage) {
+                                    MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f)
+                                } else {
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                                },
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(6.dp)
+                    ) {
+                        Text(
+                            text = "ID: ${message.id}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (isCurrentUserMessage) {
+                                MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            }
+                        )
+                        Text(
+                            text = "时间戳: ${message.timestamp}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (isCurrentUserMessage) {
+                                MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            }
+                        )
+                        Text(
+                            text = "完整时间: ${formatFullTimestamp(message.timestamp)}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (isCurrentUserMessage) {
+                                MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            }
+                        )
+                        Text(
+                            text = "发送者ID: ${message.senderId}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (isCurrentUserMessage) {
+                                MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                             }
                         )
                     }
@@ -616,6 +717,11 @@ fun EnhancedMessageInputField(
 
 private fun formatTimestamp(timestamp: Long): String {
     val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return sdf.format(Date(timestamp))
+}
+
+private fun formatFullTimestamp(timestamp: Long): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
     return sdf.format(Date(timestamp))
 }
 
