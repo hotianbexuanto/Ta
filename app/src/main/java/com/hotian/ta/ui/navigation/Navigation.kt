@@ -14,9 +14,7 @@ import com.hotian.ta.viewmodel.ChatViewModel
 
 sealed class Screen(val route: String) {
     object GroupList : Screen("group_list")
-    object Chat : Screen("chat/{groupId}") {
-        fun createRoute(groupId: Long) = "chat/$groupId"
-    }
+    object Chat : Screen("chat")
     object Settings : Screen("settings")
 }
 
@@ -27,26 +25,22 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.GroupList.route
+        startDestination = Screen.Chat.route
     ) {
         composable(Screen.GroupList.route) {
             GroupListScreen(
                 viewModel = viewModel,
                 onGroupClick = { groupId ->
                     viewModel.switchGroup(groupId)
-                    navController.navigate(Screen.Chat.createRoute(groupId))
+                    navController.popBackStack()
                 }
             )
         }
 
-        composable(
-            route = Screen.Chat.route,
-            arguments = listOf(navArgument("groupId") { type = NavType.LongType })
-        ) { backStackEntry ->
-            val groupId = backStackEntry.arguments?.getLong("groupId") ?: 0L
+        composable(Screen.Chat.route) {
             ChatScreen(
                 viewModel = viewModel,
-                onNavigateBack = { navController.popBackStack() },
+                onNavigateToGroupList = { navController.navigate(Screen.GroupList.route) },
                 onNavigateToSettings = { navController.navigate(Screen.Settings.route) }
             )
         }

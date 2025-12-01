@@ -36,6 +36,19 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     init {
         loadGroups()
         observeCurrentGroupMessages()
+        ensureDefaultGroup()
+    }
+
+    private fun ensureDefaultGroup() {
+        viewModelScope.launch {
+            repository.getAllGroups().collect { groupList ->
+                if (groupList.isEmpty()) {
+                    // 创建默认群组
+                    val defaultGroupId = repository.createGroup("默认对话")
+                    _currentGroupId.value = defaultGroupId
+                }
+            }
+        }
     }
 
     private fun loadGroups() {

@@ -69,7 +69,7 @@ import java.util.Locale
 @Composable
 fun ChatScreen(
     viewModel: ChatViewModel,
-    onNavigateBack: () -> Unit,
+    onNavigateToGroupList: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     val messages by viewModel.messages.collectAsState()
@@ -119,19 +119,25 @@ fun ChatScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        if (showSearchBar) {
+                    if (showSearchBar) {
+                        IconButton(onClick = {
                             showSearchBar = false
                             viewModel.clearSearch()
-                        } else {
-                            onNavigateBack()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "关闭搜索",
+                                tint = Color.White
+                            )
                         }
-                    }) {
-                        Icon(
-                            imageVector = if (showSearchBar) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = if (showSearchBar) "关闭搜索" else "返回",
-                            tint = Color.White
-                        )
+                    } else {
+                        IconButton(onClick = onNavigateToGroupList) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "群组列表",
+                                tint = Color.White
+                            )
+                        }
                     }
                 },
                 actions = {
