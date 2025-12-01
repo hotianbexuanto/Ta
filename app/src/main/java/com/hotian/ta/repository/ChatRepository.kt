@@ -34,6 +34,10 @@ class ChatRepository(
         return groupDao.getAllGroups()
     }
 
+    suspend fun getAllGroupsList(): List<Group> {
+        return groupDao.getAllGroupsList()
+    }
+
     suspend fun createGroup(name: String): Long {
         return groupDao.insertGroup(Group(name = name))
     }

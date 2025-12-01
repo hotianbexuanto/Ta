@@ -11,6 +11,9 @@ interface GroupDao {
     @Query("SELECT * FROM `groups` ORDER BY createdTime DESC")
     fun getAllGroups(): Flow<List<Group>>
 
+    @Query("SELECT * FROM `groups` ORDER BY createdTime DESC")
+    suspend fun getAllGroupsList(): List<Group>
+
     @Insert
     suspend fun insertGroup(group: Group): Long
 

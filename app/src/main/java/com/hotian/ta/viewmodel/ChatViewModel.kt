@@ -44,19 +44,18 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private fun ensureDefaultGroup() {
         viewModelScope.launch {
             // 只检查一次，如果没有群组则创建默认群组
-            val groups = repository.getAllGroups()
-            groups.collect { groupList ->
-                if (!hasEnsuredDefaultGroup && groupList.isEmpty()) {
-                    hasEnsuredDefaultGroup = true
-                    val defaultGroupId = repository.createGroup("默认对话")
-                    _currentGroupId.value = defaultGroupId
-                } else if (!hasEnsuredDefaultGroup && groupList.isNotEmpty()) {
-                    hasEnsuredDefaultGroup = true
-                    if (_currentGroupId.value == 0L) {
-                        _currentGroupId.value = groupList.first().id
-                    }
+            val groupList = repository.getAllGroupsList()
+            if (groupList.isEmpty()) {
+                val defaultGroupId = repository.createGroup("默认对话")
+                _currentGroupId.value = defaultGroupId
+                println("ChatViewModel: Created default group with ID: $defaultGroupId")
+            } else {
+                if (_currentGroupId.value == 0L) {
+                    _currentGroupId.value = groupList.first().id
+                    println("ChatViewModel: Set current group to first group ID: ${groupList.first().id}")
                 }
             }
+            hasEnsuredDefaultGroup = true
         }
     }
 
@@ -82,10 +81,19 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun sendMessage(content: String, type: MessageType = MessageType.TEXT, attachmentUri: Uri? = null) {
+        println("ChatViewModel.sendMessage called - content: '$content', type: $type, currentGroupId: ${_currentGroupId.value}")
+
         // 文本消息必须有内容，图片消息可以没有文字描述
-        if (content.isBlank() && type == MessageType.TEXT) return
+        if (content.isBlank() && type == MessageType.TEXT) {
+            println("ChatViewModel.sendMessage - Rejected: blank text message")
+            return
+        }
+
         // 确保有有效的群组ID
-        if (_currentGroupId.value == 0L) return
+        if (_currentGroupId.value == 0L) {
+            println("ChatViewModel.sendMessage - Rejected: currentGroupId is 0")
+            return
+        }
 
         viewModelScope.launch {
             val message = Message(
@@ -94,7 +102,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 type = type.name,
                 attachmentUri = attachmentUri?.toString()
             )
+            println("ChatViewModel.sendMessage - Sending message: $message")
             repository.sendMessage(message)
+            println("ChatViewModel.sendMessage - Message sent successfully")
         }
     }
 
