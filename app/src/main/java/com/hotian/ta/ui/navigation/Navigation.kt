@@ -1,5 +1,9 @@
 package com.hotian.ta.ui.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -27,7 +31,21 @@ fun AppNavigation(
         navController = navController,
         startDestination = Screen.Chat.route
     ) {
-        composable(Screen.GroupList.route) {
+        composable(
+            route = Screen.GroupList.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            }
+        ) {
             GroupListScreen(
                 viewModel = viewModel,
                 onGroupClick = { groupId ->
@@ -37,7 +55,15 @@ fun AppNavigation(
             )
         }
 
-        composable(Screen.Chat.route) {
+        composable(
+            route = Screen.Chat.route,
+            enterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(300))
+            }
+        ) {
             ChatScreen(
                 viewModel = viewModel,
                 onNavigateToGroupList = { navController.navigate(Screen.GroupList.route) },
@@ -45,7 +71,21 @@ fun AppNavigation(
             )
         }
 
-        composable(Screen.Settings.route) {
+        composable(
+            route = Screen.Settings.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(400)
+                ) + fadeIn(animationSpec = tween(400))
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(400)
+                ) + fadeOut(animationSpec = tween(400))
+            }
+        ) {
             SettingsScreen(
                 onNavigateBack = { navController.popBackStack() }
             )

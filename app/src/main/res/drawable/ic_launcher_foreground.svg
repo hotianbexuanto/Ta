@@ -1,0 +1,66 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 模糊滤镜 -->
+    <filter id="blur1" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4"/>
+    </filter>
+    <filter id="blur2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8"/>
+    </filter>
+    <filter id="blur3" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12"/>
+    </filter>
+
+    <!-- 渐变 -->
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#B186D6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#9B6FC4;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#D6A8E5;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E3D5F0;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#C8A5D8;stop-opacity:0.4" />
+    </linearGradient>
+
+    <radialGradient id="radial1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#E0A8F0;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#B186D6;stop-opacity:0.2" />
+    </radialGradient>
+  </defs>
+
+  <!-- 背景圆 -->
+  <circle cx="96" cy="96" r="88" fill="url(#grad1)"/>
+
+  <!-- 模糊层 1 - 大圆 -->
+  <circle cx="120" cy="70" r="45" fill="url(#radial1)" filter="url(#blur3)" opacity="0.5"/>
+
+  <!-- 模糊层 2 - 中圆 -->
+  <circle cx="70" cy="110" r="35" fill="#E3D5F0" filter="url(#blur2)" opacity="0.6"/>
+
+  <!-- 模糊层 3 - 小圆 -->
+  <circle cx="130" cy="120" r="28" fill="#D6A8E5" filter="url(#blur2)" opacity="0.5"/>
+
+  <!-- 主要图形 - "T" 字母形状（代表 Ta） -->
+  <g filter="url(#blur1)">
+    <!-- T 的横线 -->
+    <rect x="60" y="60" width="72" height="16" rx="8" fill="white" opacity="0.9"/>
+
+    <!-- T 的竖线 -->
+    <rect x="88" y="60" width="16" height="72" rx="8" fill="white" opacity="0.9"/>
+  </g>
+
+  <!-- 聊天气泡装饰 -->
+  <g opacity="0.7">
+    <!-- 气泡 1 -->
+    <path d="M 50 140 Q 40 130 50 120 L 70 120 Q 80 120 80 130 L 80 135 Q 80 145 70 145 L 55 145 L 50 150 Z"
+          fill="url(#grad2)" filter="url(#blur1)"/>
+
+    <!-- 气泡 2 -->
+    <path d="M 140 50 Q 150 40 160 50 L 160 65 Q 160 75 150 75 L 145 75 L 150 80 Z"
+          fill="url(#grad2)" filter="url(#blur1)"/>
+  </g>
+
+  <!-- 光晕效果 -->
+  <circle cx="96" cy="96" r="92" fill="none" stroke="white" stroke-width="2" opacity="0.2" filter="url(#blur1)"/>
+</svg>
