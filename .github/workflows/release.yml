@@ -1,3 +1,4 @@
+# Manual release workflow for building and publishing Android APK
 name: Android Release Build
 
 on:
