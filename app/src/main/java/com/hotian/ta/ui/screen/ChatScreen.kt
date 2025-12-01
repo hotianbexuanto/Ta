@@ -92,6 +92,7 @@ fun ChatScreen(
     }
 
     LaunchedEffect(messages.size) {
+        println("ChatScreen: messages size changed to ${messages.size}")
         if (messages.isNotEmpty() && !isSearching) {
             listState.animateScrollToItem(messages.size - 1)
         }

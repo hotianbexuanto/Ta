@@ -38,9 +38,11 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private var hasEnsuredDefaultGroup = false
 
     init {
+        println("ChatViewModel: init started")
         ensureDefaultGroup()
         loadGroups()
         observeCurrentGroupMessages()
+        println("ChatViewModel: init completed")
     }
 
     private fun ensureDefaultGroup() {
@@ -73,7 +75,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun observeCurrentGroupMessages() {
+        println("ChatViewModel: observeCurrentGroupMessages called")
         viewModelScope.launch {
+            println("ChatViewModel: observeCurrentGroupMessages - starting to collect")
             _currentGroupId
                 .flatMapLatest { groupId ->
                     println("ChatViewModel: observeCurrentGroupMessages - groupId changed to $groupId")
