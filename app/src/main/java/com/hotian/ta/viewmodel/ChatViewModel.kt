@@ -12,6 +12,8 @@ import com.hotian.ta.repository.ChatRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 class ChatViewModel(application: Application) : AndroidViewModel(application) {
@@ -72,11 +74,19 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun observeCurrentGroupMessages() {
         viewModelScope.launch {
-            _currentGroupId.collect { groupId ->
-                repository.getMessagesForGroup(groupId).collect { messageList ->
+            _currentGroupId
+                .flatMapLatest { groupId ->
+                    println("ChatViewModel: observeCurrentGroupMessages - groupId changed to $groupId")
+                    if (groupId != 0L) {
+                        repository.getMessagesForGroup(groupId)
+                    } else {
+                        flowOf(emptyList())
+                    }
+                }
+                .collect { messageList ->
+                    println("ChatViewModel: observeCurrentGroupMessages - received ${messageList.size} messages")
                     _messages.value = messageList
                 }
-            }
         }
     }
 
