@@ -97,6 +97,11 @@ fun ChatScreen(
         }
     }
 
+    // 调试：监控currentGroupId变化
+    LaunchedEffect(currentGroupId) {
+        println("ChatScreen: currentGroupId changed to $currentGroupId")
+    }
+
     val currentGroup = groups.find { it.id == currentGroupId }
 
     Scaffold(
@@ -230,6 +235,7 @@ fun ChatScreen(
             EnhancedMessageInputField(
                 value = inputText,
                 onValueChange = { inputText = it },
+                hasImage = selectedImageUri != null,
                 onSend = {
                     if (selectedImageUri != null) {
                         viewModel.sendMessage(
@@ -423,6 +429,7 @@ fun EditMessageDialog(
 fun EnhancedMessageInputField(
     value: String,
     onValueChange: (String) -> Unit,
+    hasImage: Boolean,
     onSend: () -> Unit,
     onImageClick: () -> Unit
 ) {
@@ -458,12 +465,12 @@ fun EnhancedMessageInputField(
 
         IconButton(
             onClick = onSend,
-            enabled = value.isNotBlank()
+            enabled = value.isNotBlank() || hasImage
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Send,
                 contentDescription = "发送",
-                tint = if (value.isNotBlank()) {
+                tint = if (value.isNotBlank() || hasImage) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
