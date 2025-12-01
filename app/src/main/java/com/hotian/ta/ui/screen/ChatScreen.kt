@@ -103,6 +103,11 @@ fun ChatScreen(
         println("ChatScreen: currentGroupId changed to $currentGroupId")
     }
 
+    // 调试：监控messages内容
+    LaunchedEffect(messages) {
+        println("ChatScreen: messages updated - count: ${messages.size}, content: ${messages.map { it.content }}")
+    }
+
     val currentGroup = groups.find { it.id == currentGroupId }
 
     Scaffold(
@@ -197,7 +202,9 @@ fun ChatScreen(
                     .padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                println("ChatScreen: LazyColumn rendering ${messages.size} items")
                 items(messages, key = { it.id }) { message ->
+                    println("ChatScreen: Rendering message - id: ${message.id}, content: ${message.content}")
                     EnhancedMessageItem(
                         message = message,
                         viewModel = viewModel
@@ -262,6 +269,7 @@ fun EnhancedMessageItem(
     message: Message,
     viewModel: ChatViewModel
 ) {
+    println("EnhancedMessageItem: Composing message ${message.id} - ${message.content}")
     var showMenu by remember { mutableStateOf(false) }
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }

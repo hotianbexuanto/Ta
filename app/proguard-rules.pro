@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Remove verbose MediaTek GED (Graphics Extension Driver) logs
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}
+
+# Strip specific GED error logs in release builds
+-assumenosideeffects class android.util.Log {
+    public static int e(java.lang.String, java.lang.String);
+}
