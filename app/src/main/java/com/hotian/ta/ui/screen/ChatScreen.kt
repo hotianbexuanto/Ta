@@ -95,6 +95,7 @@ fun ChatScreen(
     var showMenu by remember { mutableStateOf(false) }
     var showUserMenu by remember { mutableStateOf(false) }
     var showUserManagementDialog by remember { mutableStateOf(false) }
+    var showImageViewer by remember { mutableStateOf<String?>(null) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     val listState = rememberLazyListState()
@@ -221,7 +222,11 @@ fun ChatScreen(
                     println("ChatScreen: Rendering message - id: ${message.id}, content: ${message.content}")
                     EnhancedMessageItem(
                         message = message,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        currentUser = currentUser,
+                        onImageClick = { imageUri ->
+                            showImageViewer = imageUri
+                        }
                     )
                 }
             }
@@ -302,6 +307,14 @@ fun ChatScreen(
                 onDismiss = { showUserManagementDialog = false }
             )
         }
+
+        // 图片查看器
+        showImageViewer?.let { imageUri ->
+            ImageViewerDialog(
+                imageUri = imageUri,
+                onDismiss = { showImageViewer = null }
+            )
+        }
     }
 }
 
@@ -309,25 +322,29 @@ fun ChatScreen(
 @Composable
 fun EnhancedMessageItem(
     message: Message,
-    viewModel: ChatViewModel
+    viewModel: ChatViewModel,
+    currentUser: User?,
+    onImageClick: (String) -> Unit
 ) {
     println("EnhancedMessageItem: Composing message ${message.id} - ${message.content}")
     var showMenu by remember { mutableStateOf(false) }
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var senderName by remember { mutableStateOf("未知用户") }
+    var isCurrentUserMessage by remember { mutableStateOf(false) }
 
     // 获取发送者信息
-    LaunchedEffect(message.senderId) {
+    LaunchedEffect(message.senderId, currentUser?.id) {
         val sender = viewModel.getUserById(message.senderId)
         senderName = sender?.name ?: "未知用户"
+        isCurrentUserMessage = message.senderId == currentUser?.id
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = if (isCurrentUserMessage) Arrangement.End else Arrangement.Start
     ) {
         Card(
             modifier = Modifier
@@ -338,7 +355,11 @@ fun EnhancedMessageItem(
                 ),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = if (isCurrentUserMessage) {
+                    MaterialTheme.colorScheme.primaryContainer
+                } else {
+                    MaterialTheme.colorScheme.surface
+                }
             ),
             elevation = CardDefaults.cardElevation(2.dp)
         ) {
@@ -347,9 +368,13 @@ fun EnhancedMessageItem(
             ) {
                 // 显示发送者名称
                 Text(
-                    text = senderName,
+                    text = if (isCurrentUserMessage) "我 ($senderName)" else senderName,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (isCurrentUserMessage) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
@@ -360,14 +385,21 @@ fun EnhancedMessageItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .clip(RoundedCornerShape(8.dp)),
+                            .clip(RoundedCornerShape(8.dp))
+                            .combinedClickable(
+                                onClick = { onImageClick(message.attachmentUri) }
+                            ),
                         contentScale = ContentScale.Crop
                     )
                     if (message.content.isNotBlank() && message.content != "图片") {
                         Text(
                             text = message.content,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = if (isCurrentUserMessage) {
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            },
                             modifier = Modifier.padding(top = 8.dp)
                         )
                     }
@@ -375,7 +407,11 @@ fun EnhancedMessageItem(
                     Text(
                         text = message.content,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = if (isCurrentUserMessage) {
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
                     )
                 }
 
@@ -386,13 +422,21 @@ fun EnhancedMessageItem(
                     Text(
                         text = formatTimestamp(message.timestamp),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = if (isCurrentUserMessage) {
+                            MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        }
                     )
                     if (message.isEdited) {
                         Text(
                             text = "已编辑",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = if (isCurrentUserMessage) {
+                                MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            }
                         )
                     }
                 }
@@ -917,6 +961,45 @@ fun EditUserDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text("取消")
+            }
+        }
+    )
+}
+
+// 图片查看器对话框
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ImageViewerDialog(
+    imageUri: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = null,
+        text = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(Uri.parse(imageUri)),
+                    contentDescription = "完整图片",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(8.dp))
+                        .combinedClickable(
+                            onClick = { /* 可以添加缩放功能 */ }
+                        ),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("关闭")
             }
         }
     )

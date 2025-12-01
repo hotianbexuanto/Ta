@@ -29,6 +29,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages.asStateFlow()
 
+    // 原始消息列表(未过滤)，用于搜索后恢复
+    private val _allMessages = MutableStateFlow<List<Message>>(emptyList())
+
     private val _groups = MutableStateFlow<List<Group>>(emptyList())
     val groups: StateFlow<List<Group>> = _groups.asStateFlow()
 
@@ -116,7 +119,15 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 }
                 .collect { messageList ->
                     println("ChatViewModel: observeCurrentGroupMessages - received ${messageList.size} messages")
-                    _messages.value = messageList
+                    _allMessages.value = messageList
+                    // 如果正在搜索，过滤消息；否则显示全部
+                    if (_isSearching.value && _searchQuery.value.isNotBlank()) {
+                        _messages.value = messageList.filter { message ->
+                            message.content.contains(_searchQuery.value, ignoreCase = true)
+                        }
+                    } else {
+                        _messages.value = messageList
+                    }
                 }
         }
     }
@@ -174,19 +185,20 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         _searchQuery.value = query
         if (query.isBlank()) {
             _isSearching.value = false
+            _messages.value = _allMessages.value
             return
         }
         _isSearching.value = true
-        viewModelScope.launch {
-            repository.searchMessages(_currentGroupId.value, query).collect { searchResults ->
-                _messages.value = searchResults
-            }
+        // 从原始消息列表中过滤，保持原有顺序
+        _messages.value = _allMessages.value.filter { message ->
+            message.content.contains(query, ignoreCase = true)
         }
     }
 
     fun clearSearch() {
         _searchQuery.value = ""
         _isSearching.value = false
+        _messages.value = _allMessages.value
     }
 
     fun createGroup(name: String) {
