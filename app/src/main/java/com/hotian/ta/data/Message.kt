@@ -17,5 +17,6 @@ data class Message(
     val type: String = MessageType.TEXT.name,
     val attachmentUri: String? = null,
     val isEdited: Boolean = false,
-    val editedTimestamp: Long? = null
+    val editedTimestamp: Long? = null,
+    val senderId: Long = 1L // 发送者用户ID，默认为1（默认用户）
 )

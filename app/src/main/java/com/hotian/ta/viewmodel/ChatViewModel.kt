@@ -8,7 +8,9 @@ import com.hotian.ta.data.AppDatabase
 import com.hotian.ta.data.Group
 import com.hotian.ta.data.Message
 import com.hotian.ta.data.MessageType
+import com.hotian.ta.data.User
 import com.hotian.ta.repository.ChatRepository
+import com.hotian.ta.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
 class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private val database = AppDatabase.getDatabase(application)
     private val repository = ChatRepository(database.messageDao(), database.groupDao())
+    private val userRepository = UserRepository(database.userDao())
 
     private val _currentGroupId = MutableStateFlow(0L)
     val currentGroupId: StateFlow<Long> = _currentGroupId.asStateFlow()
@@ -28,6 +31,12 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _groups = MutableStateFlow<List<Group>>(emptyList())
     val groups: StateFlow<List<Group>> = _groups.asStateFlow()
+
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users: StateFlow<List<User>> = _users.asStateFlow()
+
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
@@ -39,10 +48,20 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         println("ChatViewModel: init started")
+        ensureDefaultUser()
         ensureDefaultGroup()
         loadGroups()
+        loadUsers()
         observeCurrentGroupMessages()
         println("ChatViewModel: init completed")
+    }
+
+    private fun ensureDefaultUser() {
+        viewModelScope.launch {
+            val defaultUser = userRepository.ensureDefaultUser()
+            _currentUser.value = defaultUser
+            println("ChatViewModel: Current user set to: ${defaultUser.name}")
+        }
     }
 
     private fun ensureDefaultGroup() {
@@ -70,6 +89,14 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 if (_currentGroupId.value == 0L && groupList.isNotEmpty()) {
                     _currentGroupId.value = groupList.first().id
                 }
+            }
+        }
+    }
+
+    private fun loadUsers() {
+        viewModelScope.launch {
+            userRepository.getAllUsers().collect { userList ->
+                _users.value = userList
             }
         }
     }
@@ -109,12 +136,16 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
+        // 确保有当前用户
+        val currentUserId = _currentUser.value?.id ?: 1L
+
         viewModelScope.launch {
             val message = Message(
                 content = content.ifBlank { if (type == MessageType.IMAGE) "图片" else "" },
                 groupId = _currentGroupId.value,
                 type = type.name,
-                attachmentUri = attachmentUri?.toString()
+                attachmentUri = attachmentUri?.toString(),
+                senderId = currentUserId
             )
             println("ChatViewModel.sendMessage - Sending message: $message")
             repository.sendMessage(message)
@@ -175,5 +206,50 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.deleteGroup(group)
         }
+    }
+
+    // 用户管理功能
+    fun switchUser(user: User) {
+        _currentUser.value = user
+        println("ChatViewModel: Switched to user: ${user.name}")
+    }
+
+    fun createUser(name: String, avatarColor: String = "#FF6200EE") {
+        if (name.isBlank()) return
+        viewModelScope.launch {
+            val userId = userRepository.createUser(name, avatarColor)
+            val newUser = userRepository.getUserById(userId)
+            newUser?.let {
+                _currentUser.value = it
+            }
+        }
+    }
+
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            userRepository.updateUser(user)
+            if (_currentUser.value?.id == user.id) {
+                _currentUser.value = user
+            }
+        }
+    }
+
+    fun deleteUser(user: User) {
+        viewModelScope.launch {
+            // 不允许删除默认用户
+            if (user.isDefault) return@launch
+
+            userRepository.deleteUser(user)
+
+            // 如果删除的是当前用户，切换到默认用户
+            if (_currentUser.value?.id == user.id) {
+                val defaultUser = userRepository.getDefaultUser()
+                _currentUser.value = defaultUser
+            }
+        }
+    }
+
+    suspend fun getUserById(userId: Long): User? {
+        return userRepository.getUserById(userId)
     }
 }
